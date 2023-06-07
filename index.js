@@ -4,10 +4,35 @@ import mongoose from "mongoose";
 import cors  from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
-import hetlmet from "helmet";
+import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
 
+
 /* Settings */
+
+const __filename = fileURLToPath(import.meta.url) ;  // Ruta completa con el nombre del Archivo 
+const __dirname = path.dirname(__filename) ;  // Ubicacion del archivo
+
+dotenv.config();
+
+const app = express();
+
+app.use( express.json() ) ;  //Permite la lectura de Json
+app.use( helmet() ) ;
+app.use(helmet.crossOriginResourcePolicy( {policy:"cross-origin"} )) ;
+app.use(morgan("common"));
+app.use(bodyParser.json( {limit:"30mb" , extended: true })) ; //Establece limite de 30MB
+app.use(bodyParser.urlencoded( {limit:"30mb" ,extended: true})) ;
+app.use( "/assets" , express.static(path.join(__dirname , "public/assets"))) ; //Establece el directorio de los archivos Publicos 
+
+/* Setting  File-Storage */ 
+
+const storage = multer.diskStorage({
+    destination: function(req , file , cb){
+        cb(null , "public/assets" );
+    }
+})
+

@@ -22,9 +22,41 @@ import User from "../models/User.js" ;
         const passwordHash =  await bcrypt.hash( password, salt )
 
         const newUser = new User({
-            
+            firstName,
+            lastName,
+            email,
+            password : passwordHash,
+            picture,
+            friend,
+            location,
+            occupation,
+            viewedProfile: Math.floor(math.random()*1000),
+            impressions: Math.floor(math.random()*1000),
         }) 
-    }catch(err){
+        const savedUser = await new newUser.save();
+        res.status(201).json(savedUser)
 
+    }catch(err){
+        res.status(500).json( { Error: err.message } )
+    }
+ }
+
+
+ /* Logging In*/
+
+ export const login = async ( req, res )=>{
+    try{
+        const { email , password } = req.body ;
+        const user = await User.findOne ( {email: email} )
+        if(!user) return res.status(400).json({msg : "El usuario no existe "})                 
+           
+        const isMatch = await bcrypt.compare( password , user.password)
+
+        if (!isMatch) return res.status(400).json({msg : "Credenciales incorrectas"})
+
+        const token = jwt.sign({id : user._id} , process.env.JWT_SECRET)
+
+    }catch(err){
+        res.status(500).json( { Error: err.message } )
     }
  }

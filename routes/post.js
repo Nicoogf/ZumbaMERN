@@ -7,7 +7,7 @@ const router = express.Router() ;
 /*Read*/
 
 router.get("/" , verifyToken , getFeedPost )
-router.get("/:userId/posts" , verifyToken . getUserPost )
+router.get("/:userId/posts" , verifyToken , getUserPost )
  ;
 
 /*Update*/

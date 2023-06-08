@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 
 
 import authRoutes from "./routes/auth.js" ;
-import userRoutes from "./routes/user.js" ;
+import userRoutes from "./routes/users.js" ;
 import postRoutes from "./routes/post.js" ;
 
 import { register } from "./controllers/auth.js" ;
@@ -49,18 +49,19 @@ const storage = multer.diskStorage(
     }
 })
 
-const upload = multer({ storage }) ;
+const upload = multer({ storage: storage });
+
 
 /* Routes */
 
 app.post( "/auth/register" , 
-          uploadsingle ("picture"),         
+          upload.single ("picture"),         
           register) ;
 
-app.post("/post" ,
-        verifyToken , 
-        uploadsingle ("picture") , 
-        createPost) ; 
+app.post( "/post" ,
+          verifyToken , 
+          upload.single ("picture") , 
+          createPost) ; 
 
 /*Routes*/
 

@@ -55,6 +55,8 @@ import User from "../models/User.js" ;
         if (!isMatch) return res.status(400).json({msg : "Credenciales incorrectas"})
 
         const token = jwt.sign({id : user._id} , process.env.JWT_SECRET)
+        delete user.password;
+        res.status(200).json( {token, user} )
 
     }catch(err){
         res.status(500).json( { Error: err.message } )

@@ -10,10 +10,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 
-import authRoutes from "./routes/auth.js"
-import userRoutes from "./routes/user.js"
+import authRoutes from "./routes/auth.js" ;
+import userRoutes from "./routes/user.js" ;
+import postRoutes from "./routes/post.js" ;
 
-import {register} from "./controllers/auth.js"
+import { register } from "./controllers/auth.js" ;
+import { createPost } from "./controllers/post.js" ;
+import { verifyToken } from "./middlewares/auth.js" ;
 
 
 
@@ -54,10 +57,16 @@ app.post( "/auth/register" ,
           uploadsingle ("picture"),         
           register) ;
 
+app.post("/post" ,
+        verifyToken , 
+        uploadsingle ("picture") , 
+        createPost) ; 
+
 /*Routes*/
 
 app.use("/auth" , authRoutes) ;
 app.use("/users" , userRoutes ) ;
+app.use("/post" , postRoutes ) ;
 
 
 
